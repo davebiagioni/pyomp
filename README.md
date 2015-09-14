@@ -1,4 +1,4 @@
-# omp
+# pyomp
 Orthogonal Matching Pursuit (Python: NumPy + SciPy)
 
 This is a simple implementation that uses scipy.optimize.nnls and numpy.  It 
