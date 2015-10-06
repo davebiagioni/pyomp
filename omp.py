@@ -160,9 +160,9 @@ def omp(X, y, nonneg=True, ncoef=None, maxit=200, standardize=False,
     
     # check types, try to make somewhat user friendly
     if type(X) is not np.ndarray:
-        X = np.array(X, dtype=np.dtype(X))
+        X = np.array(X)
     if type(y) is not np.ndarray:
-        y = np.array(y, dtype=np.dtype(y))
+        y = np.array(y)
         
     # check that n_samples match
     if X.shape[0] != len(y):
