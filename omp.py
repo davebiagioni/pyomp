@@ -1,86 +1,6 @@
 import numpy as np
 from scipy.optimize import nnls
 
-def centerColumns(x):
-    '''Mean center the columns of an array.
-    
-    Args:
-        x:  An array.
-        
-    Returns:
-        x:  Array with mean centered columns.
-        xmean:  Array of column means such that x + xmean reconstructs
-            the input array.
-    '''
-    xmean = np.tile(np.mean(x, axis=0), (x.shape[0], 1))
-    return x - xmean, xmean
-
-def normalizeColumns(x, ord=2, eps=1e-15):
-    '''Normalize the columns of an array via ||x||_p / sqrt(n)
-    
-    Args:
-        x:  An array.
-        ord:  Order of norm used to normalize.
-        
-    Returns:
-        x:  Array with normalized columns.
-        xnorm:  Array of column norms such that x * xmean reconstructs
-            the input array.
-    '''
-    
-    # if 1d array, convert to 2d array for generality
-    if np.ndim(x) == 1:
-        wasflat = True
-        x = reshape(x, (len(x), 1))
-    else:
-        wasflat = False
-    
-    # to approximate L-norm need to divide by n^(1/p)
-    nfactor = (1.0 * x.shape[0])**(1.0 / ord)
-    
-    # compute columns norms
-    xnorm = np.linalg.norm(x, ord=ord, axis=0)
-    
-    # find non-zero norms, and only normalize these columns
-    inz = np.where(xnorm > eps)[0]
-    xnorm = np.tile(xnorm, (x.shape[0], 1))
-    x[:, inz] = (x[:, inz] / xnorm[:, inz]) / nfactor
-    
-    # return 1d array if input was 1d array
-    if wasflat:
-        x = x.flatten()
-        
-    return x , xnorm
-
-def standardizeColumns(x, ord=2):
-    '''Mean center and normalize the columns of an array.
-    
-    Args:
-        x:  An array.
-        ord:  Order of norm used to normalize.
-        
-    Returns:
-        x:  Array with mean centered, normalized columns.
-        xmean:  Array of column means of same shape as x.
-        xnorm:  Array of column norms of same shape as x.
-    '''
-    
-    # if 1d array, convert to 2d array for generality
-    if np.ndim(x) == 1:
-        wasflat = True
-        x = np.reshape(x, (len(x), 1))
-    else:
-        wasflat = False
-    
-    x, xmean = centerColumns(x)
-    x, xnorm = normalizeColumns(x, ord=ord)
-    
-    # flatten again if necessary
-    if wasflat:
-        x = x.flatten()
-    
-    return x, xmean, xnorm
-
 class Result(object):
     '''Result object for storing input and output data for omp.  When called from 
     `omp`, runtime parameters are passed as keyword arguments and stored in the 
@@ -126,7 +46,7 @@ class Result(object):
         self.ypred = ypred
 
 def omp(X, y, nonneg=True, ncoef=None, maxit=200, standardize=False, 
-        fit_intercept=False, tol=1e-3, ztol=1e-12, verbose=True):
+        tol=1e-3, ztol=1e-12, verbose=True):
     '''Compute sparse orthogonal matching pursuit solution with unconstrained
     or non-negative coefficients.
     
@@ -136,8 +56,6 @@ def omp(X, y, nonneg=True, ncoef=None, maxit=200, standardize=False,
         nonneg: Enforce non-negative coefficients.
         ncoef: Max number of coefficients.  Set to n_features/2 by default.
         standardize: Mean center and normalize columns.
-        fit_intercept:  Fit an intercept.  Only matters if input is not 
-            mean centered.
         tol: Convergence tolerance.  If relative error is less than
             tol * ||y||_2, exit.
         ztol: Residual covariance threshold.  If all coefficients are less 
@@ -210,14 +128,9 @@ def omp(X, y, nonneg=True, ncoef=None, maxit=200, standardize=False,
     
     if verbose:
         print('\nIteration, relative error, number of non-zeros')
-    
+   
     # main iteration
     for it in range(maxit):
-        
-        # fit intercept first (?)
-        if fit_intercept:
-            intercept = np.mean(residual)
-            residual -= intercept
         
         # compute residual covariance vector and check threshold
         rcov = np.dot(X_transpose, residual)
