@@ -35,14 +35,13 @@ class Result(object):
         for key, val in kwargs.iteritems():
             self.params[key] = val
             
-    def update(self, coef, active, err, residual, intercept, ypred):
+    def update(self, coef, active, err, residual, ypred):
         '''Update the solution attributes.
         '''
         self.coef = coef
         self.active = active
         self.err = err
         self.residual = residual
-        self.intercept = intercept
         self.ypred = ypred
 
 def omp(X, y, nonneg=True, ncoef=None, maxit=200, standardize=False, 
@@ -71,8 +70,7 @@ def omp(X, y, nonneg=True, ncoef=None, maxit=200, standardize=False,
     
     # initialize result object
     result = Result(nnoneg=nonneg, ncoef=ncoef, maxit=maxit,
-                    standardize=standardize, fit_intercept=fit_intercept,
-                    tol=tol, ztol=ztol)
+                    standardize=standardize, tol=tol, ztol=ztol)
     if verbose:
         print(result.params)
     
@@ -175,7 +173,7 @@ def omp(X, y, nonneg=True, ncoef=None, maxit=200, standardize=False,
         if it == maxit-1:  # max iterations
             print('\nHit max iterations.')
     
-    result.update(coef, active, err[:(it+1)], residual, intercept, ypred)
+    result.update(coef, active, err[:(it+1)], residual, ypred)
     return result
 
 if __name__ == '__main__':
