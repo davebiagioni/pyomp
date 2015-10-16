@@ -14,7 +14,6 @@ class Result(object):
         coef:  Solution coefficients.
         active:  Indices of the active (non-zero) coefficient set.
         err:  Relative error per iteration.
-        intercept:  Model intercept.
         params:  Dictionary of runtime parameters passed as keyword args.   
     '''
     
@@ -28,7 +27,6 @@ class Result(object):
         self.coef = None
         self.active = None
         self.err = None
-        self.intercept = None
         
         # runtime parameters
         self.params = {}
@@ -111,13 +109,12 @@ def omp(X, y, nonneg=True, ncoef=None, maxit=200, standardize=False,
     ypred = np.zeros(y.shape, dtype=float)
     ynorm = norm2(y)                         # store for computing relative err
     err = np.zeros(maxit, dtype=float)       # relative err vector
-    intercept = 0.         # intercept
     
     # Check if response has zero norm, because then we're done. This can happen
     # in the corner case where the response is constant and you normalize it.
     if ynorm < tol:     # the same as ||residual|| < tol * ||residual||
         print('Norm of the response is less than convergence tolerance.')
-        result.update(coef, active, err[0], residual, intercept, ypred)
+        result.update(coef, active, err[0], residual, ypred)
         return result
     
     # convert tolerances to relative
