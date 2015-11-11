@@ -42,8 +42,7 @@ class Result(object):
         self.residual = residual
         self.ypred = ypred
 
-def omp(X, y, nonneg=True, ncoef=None, maxit=200, standardize=False, 
-        tol=1e-3, ztol=1e-12, verbose=True):
+def omp(X, y, nonneg=True, ncoef=None, maxit=200, tol=1e-3, ztol=1e-12, verbose=True):
     '''Compute sparse orthogonal matching pursuit solution with unconstrained
     or non-negative coefficients.
     
@@ -52,7 +51,6 @@ def omp(X, y, nonneg=True, ncoef=None, maxit=200, standardize=False,
         y: Reponse array of size n_samples x 1.
         nonneg: Enforce non-negative coefficients.
         ncoef: Max number of coefficients.  Set to n_features/2 by default.
-        standardize: Mean center and normalize columns.
         tol: Convergence tolerance.  If relative error is less than
             tol * ||y||_2, exit.
         ztol: Residual covariance threshold.  If all coefficients are less 
@@ -83,12 +81,7 @@ def omp(X, y, nonneg=True, ncoef=None, maxit=200, standardize=False,
         print('X and y must have same number of rows (samples)')
         return result
     
-    # optionally normalize each signal by l2-norm
-    if standardize:
-        y, _, _ = standardizeColumns(y)
-        X, _, _ = standardizeColumns(X)
-
-    # store normalized arrays in result object    
+    # store arrays in result object    
     result.y = y
     result.X = X
     
