@@ -66,7 +66,7 @@ def omp(X, y, nonneg=True, ncoef=None, maxit=200, tol=1e-3, ztol=1e-12, verbose=
     
     # initialize result object
     result = Result(nnoneg=nonneg, ncoef=ncoef, maxit=maxit,
-                    standardize=standardize, tol=tol, ztol=ztol)
+                    tol=tol, ztol=ztol)
     if verbose:
         print(result.params)
     
