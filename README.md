@@ -10,4 +10,4 @@ The `Result` object returned by `omp` is a self-contained expression of the prob
 that was solved and stores both the (optionally standardized) inputs, runtime parameters, 
 details of the iteration, residual, and reconstructed signal.
 
-The Jupyter notebook [`examples.ipynb`](https://github.com/davebiagioni/omp/blob/master/examples.ipynb) contains step by step examples.
+The Jupyter notebook [`examples.ipynb`](examples.ipynb) contains step by step examples.
