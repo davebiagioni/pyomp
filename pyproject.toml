@@ -1,0 +1,17 @@
+[project]
+name = "pyomp"
+version = "0.1.0"
+description = "Orthogonal Matching Pursuit (NumPy + SciPy)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+]
+
+[dependency-groups]
+notebook = [
+    "ipykernel",
+    "jupyter",
+    "matplotlib",
+]

@@ -30,7 +30,7 @@ class Result(object):
         
         # runtime parameters
         self.params = {}
-        for key, val in kwargs.iteritems():
+        for key, val in kwargs.items():
             self.params[key] = val
             
     def update(self, coef, active, err, residual, ypred):
@@ -141,7 +141,7 @@ def omp(X, y, nonneg=True, ncoef=None, maxit=200, tol=1e-3, ztol=1e-12, verbose=
         if nonneg:
             coefi, _ = nnls(X[:, active], y)
         else:
-            coefi, _, _, _ = np.linalg.lstsq(X[:, active], y)
+            coefi, _, _, _ = np.linalg.lstsq(X[:, active], y, rcond=None)
         coef[active] = coefi   # update solution
         
         # update residual vector and error

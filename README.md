@@ -1,6 +1,8 @@
 # pyomp
 Orthogonal Matching Pursuit (Python: NumPy + SciPy)
 
+> **Updated for Python 3.12.** This repository was originally written for Python 2 and has been ported to Python 3.12. Environments are managed with [uv](https://docs.astral.sh/uv/); dependencies are declared in `pyproject.toml`.
+
 This is a simple implementation that uses scipy.optimize.nnls and numpy.  It 
 computes non-negative solutions by default, since that's what I needed it for, but can 
 also be used to find unconstrained solutions by setting `nonneg=False`.  The module favors
@@ -11,3 +13,23 @@ that was solved and stores both the (optionally standardized) inputs, runtime pa
 details of the iteration, residual, and reconstructed signal.
 
 The Jupyter notebook [`examples.ipynb`](examples.ipynb) contains step by step examples.
+
+## Setup
+
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then:
+
+```sh
+uv sync --group notebook   # creates .venv (Python 3.12) and installs deps + Jupyter
+```
+
+Run the tests:
+
+```sh
+uv run python -m unittest test.omp_test
+```
+
+Launch Jupyter to view `examples.ipynb`:
+
+```sh
+uv run jupyter notebook
+```
